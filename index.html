@@ -20,30 +20,43 @@
       font-size: 1.3em;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+    .marquee {
+      white-space: nowrap;
+      overflow: hidden;
+      display: block;
+    }
+    .marquee p {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 10s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0%); }
+      to { transform: translateX(-100%); }
+    }
     .container {
       padding: 15px;
       max-width: 900px;
       margin: 0 auto;
+      overflow: hidden;
+      position: relative;
     }
-    .book-list {
+    .slider-container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      overflow-x: auto;
+      scroll-behavior: smooth;
       gap: 15px;
+      padding-bottom: 10px;
     }
     .book-card {
+      flex: 0 0 auto;
       background-color: white;
       border-radius: 10px;
       padding: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       text-align: center;
-      transition: transform 0.2s;
       cursor: pointer;
-      width: 100%;
-      max-width: 250px;
-    }
-    .book-card:hover {
-      transform: scale(1.05);
+      width: 200px;
     }
     .book-card img {
       width: 100%;
@@ -51,14 +64,22 @@
       object-fit: cover;
       border-radius: 10px;
     }
-    .pdf-viewer {
-      width: 100%;
-      height: 90vh;
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
       border: none;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      display: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    .nav-btn.left {
+      left: 0;
+    }
+    .nav-btn.right {
+      right: 0;
     }
     footer {
       text-align: center;
@@ -73,38 +94,31 @@
 <body>
   <header>
     <h2>SMAS Muhammadiyah 1 P.M</h2>
-    <p>Temukan bacaan menarik untuk menambah wawasanmu!</p>
+    <div class="marquee">
+      <p>Temukan bacaan menarik untuk menambah wawasanmu!</p>
+    </div>
   </header>
 
   <div class="container">
-    <div class="book-list">
-      <!-- Buku 1 -->
-      <div class="book-card" onclick="openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_10.pdf&embedded=true')">
+    <button class="nav-btn left" onclick="scrollLeft()">&#10094;</button>
+    <div class="slider-container" id="slider">
+      <div class="book-card">
         <img src="c1.jpg" alt="Cover Sejarah Indonesia Kelas 10">
         <h3>Sejarah Indonesia Kelas 10</h3>
         <p>Penulis: Restu Gunawan, dkk.</p>
-        <a href="#" onclick="event.preventDefault(); openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_10.pdf&embedded=true');">Baca Buku</a>
       </div>
-
-      <!-- Buku 2 -->
-      <div class="book-card" onclick="openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_11.pdf&embedded=true')">
+      <div class="book-card">
         <img src="c2.jpg" alt="Cover Sejarah Indonesia Kelas 11">
         <h3>Sejarah Indonesia Kelas 11</h3>
-        <p>Penulis: Sardiman AM</p>
-        <a href="#" onclick="event.preventDefault(); openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_11.pdf&embedded=true');">Baca Buku</a>
+        <p>Penulis: Sardiman AM, dkk.</p>
       </div>
-
-      <!-- Buku 3 -->
-      <div class="book-card" onclick="openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_12.pdf&embedded=true')">
+      <div class="book-card">
         <img src="c3.jpg" alt="Cover Sejarah Indonesia Kelas 12">
         <h3>Sejarah Indonesia Kelas 12</h3>
         <p>Penulis: Abdurakhman, dkk.</p>
-        <a href="#" onclick="event.preventDefault(); openPdf('https://docs.google.com/gview?url=https://karmanangwarmase.github.io/perpus_digital/si_kelas_12.pdf&embedded=true');">Baca Buku</a>
       </div>
     </div>
-
-    <!-- Area untuk menampilkan PDF -->
-    <iframe id="pdf-viewer" class="pdf-viewer"></iframe>
+    <button class="nav-btn right" onclick="scrollRight()">&#10095;</button>
   </div>
 
   <footer>
@@ -112,10 +126,11 @@
   </footer>
 
   <script>
-    function openPdf(pdfUrl) {
-      const pdfViewer = document.getElementById('pdf-viewer');
-      pdfViewer.src = pdfUrl;
-      pdfViewer.style.display = 'block';
+    function scrollLeft() {
+      document.getElementById('slider').scrollBy({ left: -220, behavior: 'smooth' });
+    }
+    function scrollRight() {
+      document.getElementById('slider').scrollBy({ left: 220, behavior: 'smooth' });
     }
   </script>
 </body>
